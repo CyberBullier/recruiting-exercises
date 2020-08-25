@@ -14,6 +14,7 @@ class InventoryAllocator:
     def cheapest_shipment(self, items: Dict[str, int], warehouses: List[Dict]) -> List[Dict[str,Dict[str,int]]]:
         """
             preconditions:
+                - assume warehouses presorted based on cost
                 - assume integer arguments are 32 bit signed, <=2^32 -1
                 - assume integer arguments in items are > 0; invalid order if ordering <= 0 of an item
                 - assume integer arguments in warehouses >= 0
@@ -26,6 +27,7 @@ class InventoryAllocator:
         shipment = collections.defaultdict(dict)
         for key,val in items.items():
             count = 0
+            # greedily select items from lowest cost warehouse to next
             for warehouse in warehouses:
                 if key in warehouse['inventory']:
                     if warehouse['inventory'][key] + count >=val:
