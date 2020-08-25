@@ -1,16 +1,28 @@
 from typing import List, Dict
 import collections
+
 class InventoryAllocator:
-    @classmethod
-    def cheapest_shipment(cls, items: Dict[str, int], warehouses: List[Dict]):
+    def _post_process_shipment(self, shipment: Dict[str,Dict[str,int]]) -> List[Dict[str,Dict[str,int]]]:
+        ans = []
+        for key,val in shipment.items():
+            if not val:
+                continue
+            else:
+                ans.append({key:val})
+        return ans
+
+    def cheapest_shipment(self, items: Dict[str, int], warehouses: List[Dict]) -> List[Dict[str,Dict[str,int]]]:
         """
             preconditions:
-                - assume all item quantities in items & warehouses are > 0
-                and <2^32 - 1
-                - assume every dictionary object in warehouses have distinct
+                - assume integer arguments are 32 bit signed, <=2^32 -1
+                - assume integer arguments in items are > 0; invalid order if ordering <= 0 of an item
+                - assume integer arguments in warehouses >= 0
+                - assume every top level dictionary object in warehouses have distinct
                 'name' value associated with its 'name' key
         """
+        # either arguments are empty, impossible to fufill a shipment
         if not items or not warehouses:return []
+        # initialize shipment container
         shipment = collections.defaultdict(dict)
         for key,val in items.items():
             count = 0
@@ -29,13 +41,7 @@ class InventoryAllocator:
                     if key in shipment[item]:
                         del shipment[item][key]
         # post process shipment results; remove warehouses with no orders
-        ans = []
-        for key,val in shipment.items():
-            if not val:
-                continue
-            else:
-                ans.append({key:val})
-        return ans
+        return self._post_process_shipment(shipment)
 
 
 
