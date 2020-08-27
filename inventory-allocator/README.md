@@ -11,7 +11,7 @@
 2. Navigate to appropriate sub directory
 `cd recruiting-exercises/inventory-allocator`
 
-3. Run unnittests
+3. Run unittests
 `python3 -m unittest inventory_allocator_test.py `
 
 ### Food for thought?
